@@ -5,9 +5,14 @@ User Detail Page
 
 {% block content %}
 <h1>User Details</h1>
-<form>
     <img src="{{curr_user.image_url}}" width="300" height="300"/>
     <p>{{curr_user.get_full_name()}}</p>
     <a href="/users/{{curr_user.id}}/edit">Edit</a><a href="/users/{{curr_user.id}}/delete">Delete</a>
-</form>
+<h2>Posts</h2>
+<ul>
+    {% for post in curr_user.posts %}
+    <li><a href="/posts/{{post.id}}">{{post.title}}</a></li>
+    {% endfor %}
+</ul>
+<a href="/users/{{curr_user.id}}/posts/new">Add Post</a>
 {% endblock %}

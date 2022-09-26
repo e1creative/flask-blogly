@@ -4,7 +4,7 @@ from crypt import methods
 from site import USER_BASE
 from flask import Flask, request, render_template, redirect, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User
+from models import db, connect_db, User, Post
 
 app = Flask(__name__)
 
@@ -114,3 +114,81 @@ def delete_user(user_id):
     db.session.commit()
 
     return redirect('/users')
+
+################ ROUTES FOR POSTS ################
+
+@app.route('/users/<int:user_id>/posts/new')
+def show_add_post_form(user_id):
+    """Show form to add a post for that user."""
+
+    curr_user = User.query.get(user_id)
+
+    return render_template('new-post-form.html', curr_user=curr_user)
+
+@app.route('/users/<int:user_id>/posts/new', methods=["POST"])
+def handle_add_post_form(user_id):
+    """Handle add form; add post and redirect to the user detail page."""
+
+    title = request.form.get('title')
+    content = request.form.get('content')
+    created_at = request.form.get('created_at')
+
+    new_post = Post(title=title, content=content, created_at=created_at, user_id=user_id)
+
+    # add the new instance to the "session" (like git) using .add()
+    db.session.add(new_post)
+    # commit the new instance to the database using .commit()
+    db.session.commit()
+
+    return redirect(f'/user/{user_id}')
+
+
+@app.route('/posts/<int:post_id>')
+def show_post(post_id):
+    """Show a post.
+    Show buttons to edit and delete the post."""
+
+    curr_post = Post.query.get(post_id)
+
+    return render_template('post-detail-page.html', curr_post=curr_post)
+
+
+@app.route('/posts/<int:post_id>/edit')
+def edit_post(post_id):
+    """Show form to edit a post, and to cancel (back to user page)."""
+
+    curr_post = Post.query.get(post_id)
+
+    return render_template('post-edit-page.html', curr_post=curr_post)
+
+
+@app.route('/posts/<int:post_id>/edit', methods=['POST'])
+def handle_edit_post(post_id):
+    """Handle editing of a post. Redirect back to the post view."""
+
+    # query the databases for a post based on the ID using .get()
+    curr_post = Post.query.get(post_id)
+
+    # edit the values base on the newly submitted form values
+    curr_post.title = request.form.get('title')
+    curr_post.content = request.form.get('content')
+    
+    
+
+    # add the edited instance to the "session" (like git) using .add()
+    db.session.add(curr_post)
+    # commit the new instance to the database using .commit()
+    db.session.commit()
+
+    return redirect(f'/posts/{post_id}')
+
+
+@app.route('/posts/<int:post_id>/delete')
+def delete_post(post_id):
+    """Delete the post."""
+
+    Post.query.filter_by(id=post_id).delete()
+
+    db.session.commit()    
+
+    return redirect('/')

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block page_title %}
+Post Detail Page
+{% endblock %}
+
+{% block content %}
+<h1>{{curr_post.title }}</h1>
+<p>{{curr_post.content}}</p>
+<p>By {{curr_post.user.get_full_name()}}</p>
+<a href="/users/{{curr_post.user.id}}">Cancel</a>
+<a href="/posts/{{curr_post.id}}/edit">Edit</a>
+<a href="/posts/{{curr_post.id}}/delete">Delete</a>
+{% endblock %}
