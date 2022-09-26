@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block page_title %}
+User Detail Page
+{% endblock %}
+
+{% block content %}
+<h1>User Details</h1>
+<form>
+    <img src="{{curr_user.image_url}}" width="300" height="300"/>
+    <p>{{curr_user.get_full_name()}}</p>
+    <a href="/users/{{curr_user.id}}/edit">Edit</a><a href="/users/{{curr_user.id}}/delete">Delete</a>
+</form>
+{% endblock %}
