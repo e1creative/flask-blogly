@@ -7,6 +7,12 @@ Post Detail Page
 <h1>{{curr_post.title }}</h1>
 <p>{{curr_post.content}}</p>
 <p>By {{curr_post.user.get_full_name()}}</p>
+<p>Tags: </p>
+<ul>
+    {% for tag in curr_post.tags%}
+        <li><a href="/tags/{{tag.id}}">{{tag.name}}</a></li>
+    {% endfor %}
+</ul>
 <a href="/users/{{curr_post.user.id}}">Cancel</a>
 <a href="/posts/{{curr_post.id}}/edit">Edit</a>
 <a href="/posts/{{curr_post.id}}/delete">Delete</a>

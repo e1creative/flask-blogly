@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block page_title %}
+Tag Detail Page
+{% endblock %}
+
+{% block content %}
+<h1>{{curr_tag.name}}</h1>
+<p>Posts with this tag: </p>
+<ul>
+    {% for post in curr_tag.posts%}
+        <li><a href="/posts/{{post.id}}">{{post.title}}</a></li>
+    {% endfor %}
+</ul>
+<a href="/tags/{{curr_tag.id}}/edit">Edit</a><a href="/tags/{{curr_tag.id}}/delete">Delete</a>
+{% endblock %}

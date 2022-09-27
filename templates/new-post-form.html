@@ -6,10 +6,15 @@ Create a New Post
 {% block content %}
 <h1>Add Post for {{curr_user.get_full_name()}}</h1>
 <form method="POST" action="/users/{{curr_user.id}}/posts/new">
-    <label for="title">Title</label>
-    <input type="text" id="title" name="title">
-    <label for="content">Content</label>
-    <input type="textarea" id="content" name="content">
+    <p><label for="title">Title</label>
+    <input type="text" id="title" name="title"></p>
+    <p><label for="content">Content</label>
+    <input type="textarea" id="content" name="content"></p>
+
+    {% for tag in all_tags %}
+    <p><input type="checkbox" id="{{tag.name}}" name="tag" value="{{tag.id}}">
+    <label for="{{tag.name}}">{{tag.name}}</label></p>
+    {% endfor %}
     <a href="/users/{{curr_user.id}}">Cancel</a><button type="submit">Add</button>
 </form>
 {% endblock %}
